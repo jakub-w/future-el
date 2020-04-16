@@ -92,7 +92,7 @@
   "Check if the future already finished and set the value."
   (and (futurep future)
        (with-mutex (future--mutex future)
-	 (future--has-value-p future))))
+         (future--has-value-p future))))
 
 (defsubst future--set-value (future value)
   "Internal function. Don't use!"
@@ -122,20 +122,20 @@ THUNK is a procedure that takes no arguments.
 CALLBACK is a procedure that takes one argument - a value returned by the
 future.  It is called after THUNK returns."
   (let* ((mutex (make-mutex))
-	 (f (vector 'future
-		    nil
-		    mutex
-		    (make-condition-variable mutex)
-		    'no-value)))
+         (f (vector 'future
+                    nil
+                    mutex
+                    (make-condition-variable mutex)
+                    'no-value)))
     (future--set-thread
      f
      (make-thread
       (lambda ()
-	(let ((result (funcall thunk)))
-	  (with-mutex (future--mutex f)
-	    (future--set-value f result)
-	    (condition-notify (future--cond-var f)))
-	  (and callback (funcall callback (car (future--value f))))))))
+        (let ((result (funcall thunk)))
+          (with-mutex (future--mutex f)
+            (future--set-value f result)
+            (condition-notify (future--cond-var f)))
+          (and callback (funcall callback (car (future--value f))))))))
     f))
 
 (defun future-wait-for (future seconds)
@@ -144,13 +144,13 @@ if the timeout was reached.
 
 SECONDS is time in seconds. Can be fractional."
   (let ((elapsed 0.0)
-	(interval (min 0.1 seconds)))
+        (interval (min 0.1 seconds)))
     (while (and (< elapsed seconds)
-		(not (future-has-value-p future)))
+                (not (future-has-value-p future)))
       (sleep-for interval)
       (setq elapsed (+ interval elapsed)))
     (if (future-has-value-p future)
-	(car (future--value future))
+        (car (future--value future))
       'no-value)))
 
 (provide 'future)

@@ -8,7 +8,7 @@ Keep in mind that if you want to speed up an operation by making it concurrent s
 To make a future use ~make-future~ function, providing it with a thunk, just like you would when creating a thread:
 
 #+BEGIN_SRC elisp
-  (make-future (lambda () (+ 10 20)))
+   (make-future (lambda () (+ 10 20)))
 #+END_SRC
 
 The returned value is a future object that will be needed for other functions. You can provide an optional callback to run after the future has finished. It should be a function that takes one argument - value returned by the thunk given as a first argument:
@@ -20,6 +20,10 @@ The returned value is a future object that will be needed for other functions. Y
 
 The callback will run in the same thread as the thunk.
 
-To get the value returned by a thunk without using a callback function use ~future-value~ or ~future-wait-for~. ~future-value~ will block until the thunk has returned a value. Then return it itself. ~future-wait-for~ will block only for the specified amount of time or unil the thunk returns. Its argument SECONDS can be an integer of a floating-point number so you can give it a fraction of a second to wait. It will return either the value or 'no-value symbol if the timeout was reached.
+To get the value returned by a thunk without using a callback function use ~future-value~ or ~future-wait-for~.
+
+~future-value~ will block until the thunk has returned a value. Then return it itself.
+
+~future-wait-for~ will block only for the specified amount of time or unil the thunk returns. Its argument SECONDS can be an integer of a floating-point number so you can give it a fraction of a second to wait. It will return either the value or 'no-value symbol if the timeout was reached.
 
 ~future-has-value-p~ can be used to check if the future already returned a value without blocking.
